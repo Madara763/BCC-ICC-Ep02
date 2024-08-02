@@ -91,7 +91,7 @@ int main (int argc, char *argv[])
   
   multMatMat (mRow_1, mRow_2, n, resMat);
  
-  LIKWID_MARKER_STOP ("multMatVet");
+  LIKWID_MARKER_STOP ("multMatMat");
   LIKWID_MARKER_CLOSE;  
   time = (timestamp() - time);
   //fim MatMat

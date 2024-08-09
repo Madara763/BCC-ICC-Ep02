@@ -14,9 +14,23 @@ matmult:	$(objs)
 # regras de compilação
 matmult.o:	matmult.c
 matriz.o:	matriz.c
+
 #regras especificas para  libs em outros caminhos
 utils.o:	utils-master/utils/utils.c
 	gcc $(CFLAGS) -c -o utils.o utils-master/utils/utils.c
+
+
+#Flags para separar os teste com e sem otimizacao
+#Sem otm
+sem_otm: CFLAGS += -D_SEM_OTM_
+sem_otm: $(PROGS)
+
+#Com otm
+com_otm: CFLAGS += -D_COM_OTM_
+com_otm: $(PROGS)
+
+
+#Utilitarios
 
 #flags de debug
 debug:	CFLAGS += -g -D_DEBUG_

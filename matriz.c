@@ -177,7 +177,7 @@ void prnVetor (Vetor vet, int n)
 /* ----------- FUNÇÕES OTIMIZADAS---------------- */
 
 MatRow otm_geraMatRow (int m, int n, int zerar){
-  MatRow matriz = (real_t *) aligned_alloc(16, m*n*sizeof(real_t));
+  MatRow matriz = (real_t *) aligned_alloc(ALN, m*n*sizeof(real_t));
 
   if (matriz) {
     if (zerar)
@@ -193,7 +193,7 @@ MatRow otm_geraMatRow (int m, int n, int zerar){
 
 
 Vetor otm_geraVetor (int n, int zerar){
-  Vetor vetor = (real_t *) aligned_alloc(16, n*sizeof(real_t));
+  Vetor vetor = (real_t *) aligned_alloc(ALN, n*sizeof(real_t));
 
   if (vetor) {
     if (zerar)
@@ -261,10 +261,12 @@ void otm_multMatMat (MatRow restrict A, MatRow restrict B, int n, MatRow restric
   int x_ini, x_fim;
   int ind_A = 0, ind_B = 0, ind_C = 0; //ind_C eh um in-di-ce :D (os outros tbm sao)
 
+  //bloco i
   for (int iBloco = 0; iBloco < n / BK; ++iBloco) {
     l_iniBloco = iBloco * BK;
     l_fimBloco = l_iniBloco + BK;
-
+    
+    //bloco j
     for (int jBloco = 0; jBloco < n / BK; ++jBloco) {
       c_iniBloco = jBloco * BK;
       c_fimBloco = c_iniBloco + BK;
@@ -278,7 +280,6 @@ void otm_multMatMat (MatRow restrict A, MatRow restrict B, int n, MatRow restric
             ind_C = i*n+j;
 
             for (int x = x_ini; x < x_fim; ++x) {
-              // Para evitar recálculos
               ind_A = (ind_C - j) + x;
               ind_B = (x * n) + j;
               C[ind_C + 0] += A[ind_A] * B[ind_B + 0];

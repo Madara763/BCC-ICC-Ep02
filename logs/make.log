@@ -1,10 +1,10 @@
-gcc -O3 -mavx2 -march=native -I/home/soft/likwid/include -DLIKWID_PERFMON -D_SEM_OTM_   -c -o matmult.o matmult.c
-gcc -O3 -mavx2 -march=native -I/home/soft/likwid/include -DLIKWID_PERFMON -D_SEM_OTM_   -c -o matriz.o matriz.c
-gcc -O3 -mavx2 -march=native -I/home/soft/likwid/include -DLIKWID_PERFMON -D_SEM_OTM_ -c -o utils.o utils-master/utils/utils.c
-gcc   matmult.o matriz.o utils.o  -L/home/soft/likwid/lib -llikwid -o matmult
+gcc -Wall -O3 -mavx2 -march=native -I/usr/local/include -DLIKWID_PERFMON -D_SEM_OTM_   -c -o matmult.o matmult.c
+gcc -Wall -O3 -mavx2 -march=native -I/usr/local/include -DLIKWID_PERFMON -D_SEM_OTM_   -c -o matriz.o matriz.c
+gcc -Wall -O3 -mavx2 -march=native -I/usr/local/include -DLIKWID_PERFMON -D_SEM_OTM_ -c -o utils.o utils-master/utils/utils.c
+gcc   matmult.o matriz.o utils.o  -L/usr/local/lib -llikwid -o matmult
 rm -f matmult.o matriz.o utils.o *~
-gcc -O3 -mavx2 -march=native -I/home/soft/likwid/include -DLIKWID_PERFMON -D_COM_OTM_   -c -o matmult.o matmult.c
-gcc -O3 -mavx2 -march=native -I/home/soft/likwid/include -DLIKWID_PERFMON -D_COM_OTM_   -c -o matriz.o matriz.c
-gcc -O3 -mavx2 -march=native -I/home/soft/likwid/include -DLIKWID_PERFMON -D_COM_OTM_ -c -o utils.o utils-master/utils/utils.c
-gcc   matmult.o matriz.o utils.o  -L/home/soft/likwid/lib -llikwid -o matmult
+gcc -Wall -O3 -mavx2 -march=native -I/usr/local/include -DLIKWID_PERFMON -D_COM_OTM_    -c -o matmult.o matmult.c
+gcc -Wall -O3 -mavx2 -march=native -I/usr/local/include -DLIKWID_PERFMON -D_COM_OTM_    -c -o matriz.o matriz.c
+gcc -Wall -O3 -mavx2 -march=native -I/usr/local/include -DLIKWID_PERFMON -D_COM_OTM_  -c -o utils.o utils-master/utils/utils.c
+gcc   matmult.o matriz.o utils.o  -L/usr/local/lib -llikwid -o matmult
 rm -f matmult.o matriz.o utils.o *~

@@ -1,6 +1,6 @@
 #gerar "warnings" detalhados e infos de depuração
 CC= gcc
-CFLAGS = -O3 -mavx2 -march=native -I${LIKWID_HOME}/include -DLIKWID_PERFMON
+CFLAGS =-Wall -O3 -mavx2 -march=native -I${LIKWID_HOME}/include -DLIKWID_PERFMON
 LDLIBS = -L${LIKWID_HOME}/lib -llikwid
 objs = matmult.o matriz.o utils.o
 PROGS = matmult
@@ -26,7 +26,7 @@ sem_otm: CFLAGS += -D_SEM_OTM_
 sem_otm: $(PROGS)
 
 #Com otm
-com_otm: CFLAGS += -D_COM_OTM_
+com_otm: CFLAGS += -D_COM_OTM_ 
 com_otm: $(PROGS)
 
 

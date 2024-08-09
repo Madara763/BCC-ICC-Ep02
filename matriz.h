@@ -9,7 +9,8 @@
 #define ABS(num)  ((num) < 0.0 ? -(num) : (num))
 
 #define UF 4
-#define BK 4 
+#define BK 12 
+#define ALN 64 
 
 /* Tipos para matrizes e vetores */
 

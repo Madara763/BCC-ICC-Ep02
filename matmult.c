@@ -80,7 +80,7 @@ int main (int argc, char *argv[])
   time = (timestamp() - time);
   //fim MatVet
 
-  printf("mult Mat x Vet n=%d: %.5lfms\n", n, time);
+  printf("TEMPO: M x V n=%d: %.5lfms\n", n, time);
   
   //inicio monitoramento MatMat
   time=timestamp();
@@ -94,7 +94,7 @@ int main (int argc, char *argv[])
   time = (timestamp() - time);
   //fim MatMat
 
-  printf("mult Mat x Mat n=%d: %.5lfms\n", n, time);
+  printf("TEMPO: M x M n=%d: %.5lfms\n", n, time);
 
   #ifdef _DEBUG_
     prnVetor (res, n);
@@ -148,7 +148,7 @@ int main (int argc, char *argv[])
   time = (timestamp() - time);
   //fim OtmMatVet
 
-  printf("OTM Mat x Vet n=%d: %.5lfms\n", n, time);
+  printf("TEMPO: M x V OTIMIZADO n=%d: %.5lfms\n", n, time);
 
   //inicio monitoramento OtmMatMat
   time=timestamp();
@@ -162,7 +162,7 @@ int main (int argc, char *argv[])
   time = (timestamp() - time);
   //fim MatMat
 
-  printf("OTM Mat x Mat n=%d: %.5lfms\n", n, time);
+  printf("TEMPO: M x M OTIMIZADO n=%d: %.5lfms\n", n, time);
 
   #ifdef _DEBUG_
     prnVetor (res, n);

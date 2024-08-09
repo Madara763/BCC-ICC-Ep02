@@ -173,3 +173,135 @@ void prnVetor (Vetor vet, int n)
   printf(SEP_RES);
 }
 
+
+/* ----------- FUNÇÕES OTIMIZADAS---------------- */
+
+MatRow otm_geraMatRow (int m, int n, int zerar){
+  MatRow matriz = (real_t *) aligned_alloc(16, m*n*sizeof(real_t));
+
+  if (matriz) {
+    if (zerar)
+      memset(matriz,0,m*n*sizeof(real_t));
+    else
+      for (int i=0; i < m; ++i)
+        for (int j=0; j < n; ++j)
+          matriz[i*n + j] = generateRandomA(i, j);
+  }
+
+  return (matriz);
+}
+
+
+Vetor otm_geraVetor (int n, int zerar){
+  Vetor vetor = (real_t *) aligned_alloc(16, n*sizeof(real_t));
+
+  if (vetor) {
+    if (zerar)
+      memset(vetor,0,n*sizeof(real_t));
+    else
+      for (int i=0; i < n; ++i)
+    vetor[i] = generateRandomB();
+  }
+
+  return (vetor);
+}
+
+void otm_multMatVet (MatRow restrict mat, Vetor restrict v, int m, int n, Vetor restrict res){
+  if (!res) return;
+
+  //declaracao variaveis 
+  int l_iniBloco = 0, l_fimBloco = 0, c_iniBloco = 0, c_fimBloco = 0;
+  int aux = 0;
+
+  //Blocking com BK definido no .h
+  for (int iBloco = 0; iBloco < m / BK; ++iBloco) {
+    l_iniBloco = BK * iBloco;
+    l_fimBloco = BK + l_iniBloco;
+
+    for (int jBloco = 0; jBloco < n / BK; ++jBloco) {
+      c_iniBloco = BK * jBloco;
+      c_fimBloco = BK + c_iniBloco;
+
+      //Unroll com UF definido no .h
+      for (int i = l_iniBloco; i < l_fimBloco; i += UF){
+        aux = (i * n);
+        for (int j = c_iniBloco; j < c_fimBloco; ++j) {
+          res[i]   += mat[aux + j] * v[j];
+          res[i+1] += mat[aux + n + j] * v[j];
+          res[i+2] += mat[aux + n + n + j] * v[j];
+          res[i+3] += mat[aux + n + n + n + j] * v[j];
+        }
+      }//fim unroll
+    }
+  }//fim block
+
+  //Se nao sobrou bloco incompleto finaliza
+  if (! m % BK)
+    return;
+  //Executa para os meio blocos que restaram
+  for (int i = m - (m % BK); i < m; ++i) {
+    for (int j = 0; j < n; j++) {
+      res[i] += mat[(i * n) + j] * v[j];
+    }
+  }
+  for (int i = 0; i < n - (n % BK); ++i) {
+    for (int j = n - (n % BK); j < n; ++j) {
+      res[i] += mat[(i * n) + j] * v[j];
+    }
+  }
+
+  return;
+}//fim otm_multMatVet
+
+
+void otm_multMatMat (MatRow restrict A, MatRow restrict B, int n, MatRow restrict C)
+{
+  int l_iniBloco, l_fimBloco;
+  int c_iniBloco, c_fimBloco;
+  int x_ini, x_fim;
+  int ind_A = 0, ind_B = 0, ind_C = 0; //ind_C eh um in-di-ce :D (os outros tbm sao)
+
+  for (int iBloco = 0; iBloco < n / BK; ++iBloco) {
+    l_iniBloco = iBloco * BK;
+    l_fimBloco = l_iniBloco + BK;
+
+    for (int jBloco = 0; jBloco < n / BK; ++jBloco) {
+      c_iniBloco = jBloco * BK;
+      c_fimBloco = c_iniBloco + BK;
+
+      for (int k = 0; k < n / BK; ++k) {
+        x_ini = k * BK;
+        x_fim = x_ini + BK;
+
+        for (int i = l_iniBloco; i < l_fimBloco; ++i) {
+          for(int j = c_iniBloco; j < c_fimBloco; j += UF) {
+            ind_C = i*n+j;
+
+            for (int x = x_ini; x < x_fim; ++x) {
+              // Para evitar recálculos
+              ind_A = (ind_C - j) + x;
+              ind_B = (x * n) + j;
+              C[ind_C + 0] += A[ind_A] * B[ind_B + 0];
+              C[ind_C + 1] += A[ind_A] * B[ind_B + 1];
+              C[ind_C + 2] += A[ind_A] * B[ind_B + 2];
+              C[ind_C + 3] += A[ind_A] * B[ind_B + 3];
+            }//fim for x
+          }//fim for j
+        }//fim for i
+      }//fim for k
+    }//fim for bloco J
+  }//fim for bloco i
+
+  //Se nao sobrou bloco incompleto finaliza  
+  if (! (n % BK))
+    return;
+
+  //Faz pro bloco restante
+  for (int i = 0; i < n; ++i)
+    for (int j = 0; j < n; ++j)
+      for (int k = 0; k < n; ++k)
+        C[i * n + j] += A[i * n + k] * B[k * n + j];
+
+  return;
+}
+

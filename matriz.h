@@ -6,8 +6,10 @@
 #define DEF_SIZE 128
 #define BASE 32
 
-
 #define ABS(num)  ((num) < 0.0 ? -(num) : (num))
+
+#define UF 4
+#define BK 8 
 
 /* Tipos para matrizes e vetores */
 
@@ -28,4 +30,12 @@ void multMatMat(MatRow A, MatRow B, int n, MatRow C);
 
 void prnMat (MatRow mat, int m, int n);
 void prnVetor (Vetor vet, int n);
+
+/* ----------- FUNÇÕES OTIMIZADAS ---------------- */
+
+MatRow otm_geraMatRow (int m, int n, int zerar);
+Vetor otm_geraVetor (int n, int zerar);
+
+void otm_multMatVet (MatRow restrict mat, Vetor restrict v, int m, int n, Vetor restrict res);
+void otm_multMatMat (MatRow restrict A, MatRow restrict B, int n, MatRow restrict C);
 

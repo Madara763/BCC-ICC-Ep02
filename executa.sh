@@ -14,7 +14,7 @@ CPU=$(echo ${CPUORDEM} | cut -c ${cpu_cont} )
 CPU=15
 
 # Compila
-make -B
+make -B > logs/make.log
 
 # Define o modo de desempenho
 echo "performance" > /sys/devices/system/cpu/cpufreq/policy3/scaling_governor
@@ -32,5 +32,5 @@ done < "$ENTRADA"
 echo "powersave" > /sys/devices/system/cpu/cpufreq/policy3/scaling_governor
 
 # Limpa os arquivos .o
-make clean
+make clean >> logs/make.log
 

@@ -5,11 +5,6 @@
 METRICA="FLOPS_DP"
 PROGRAMA="matmult"
 ENTRADA="entrada_matmult.in"
-ARQSAIDA="saida_lkw.txt"
-
-#Cria um arquivo de sda novo
-rm ${ARQSAIDA} 
-touch ${ARQSAIDA} 
 
 
 #Pega o CPU com maior ordem e salva em CPU 
@@ -38,7 +33,8 @@ while IFS= read -r x
 do
     for k in $METRICA
     do
-        likwid-perfctr -C ${CPU} -g ${k} -m ./$PROGRAMA ${x} >> ${ARQSAIDA}
+        ARQSAIDA="Resultados/Sem_Otm/"$k"_"$x".log"
+	likwid-perfctr -C ${CPU} -g ${k} -m ./$PROGRAMA ${x} >> ${ARQSAIDA}
 	echo Executando $PROGRAMA SEM OTM para $k com tamanho $x
     done
 done < "$ENTRADA"
@@ -64,6 +60,7 @@ while IFS= read -r x
 do
     for k in $METRICA
     do
+	ARQSAIDA="Resultados/Com_Otm/"$k"_"$x".log"
         likwid-perfctr -C ${CPU} -g ${k} -m ./$PROGRAMA ${x} >> ${ARQSAIDA}
         echo Executando $PROGRAMA COM OTM para $k com tamanho $x
     done
@@ -77,5 +74,15 @@ make clean >> logs/make.log
 
 
 #========FORMATA A SAIDA========#
+echo 
+echo +++++++++++++++ FINALIZADO +++++++++++++++ 
+echo
 
-cat ${ARQSAIDA}
+echo Testes Sem Otimizacao:
+ls Resultados/Sem_Otm/
+
+echo  
+
+echo Testes Com Otimizacao:
+ls Resultados/Com_Otm/
+
